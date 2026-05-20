@@ -61,10 +61,8 @@ const odpInput = document.getElementById('odp');
 
 let lang = 0;
 let random = 0;
-// Dodatkowa flaga, żeby pierwsze wciśnięcie przycisku tylko losowało słówko
 let isFirstClick = true; 
 
-// Opcjonalnie: możliwość zatwierdzania klawiszem ENTER
 odpInput.addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -75,20 +73,17 @@ odpInput.addEventListener("keypress", function(event) {
 check.addEventListener("click", function(){
     let odp = odpInput.value.trim();
     
-    // Sprawdzamy odpowiedź tylko, jeśli to nie jest pierwsze kliknięcie startujące aplikację
     if (!isFirstClick) {
         if (lang == 1) { 
-            // Oczekujemy hiszpańskiego
             if (odp.toLowerCase() === esp[random].toLowerCase()) {
                 czy.innerHTML = "Dobrze!";
-                czy.className = "correct"; // Ustawia zielony kolor
+                czy.className = "correct";
             } else {
                 czy.innerHTML = "Źle, prawidłowa odpowiedź to: " + esp[random];
-                czy.className = "wrong"; // Ustawia czerwony kolor
+                czy.className = "wrong"; 
             }
         } 
         else if (lang == 0) { 
-            // Oczekujemy polskiego
             if (odp.toLowerCase() === pl[random].toLowerCase()) {
                 czy.innerHTML = "Dobrze!";
                 czy.className = "correct";
@@ -99,10 +94,8 @@ check.addEventListener("click", function(){
         }
     }
     
-    // Zmieniamy flagę po pierwszym kliknięciu
     isFirstClick = false;
 
-    // Losujemy kolejne słowo
     random = Math.floor(Math.random() * esp.length);
     let nowyJezyk = Math.floor(Math.random() * 2); 
     
@@ -114,7 +107,6 @@ check.addEventListener("click", function(){
         lang = 0; 
     }
 
-    // Czyszczenie i ustawianie focusu na input, by można było od razu pisać
     odpInput.value = "";
     odpInput.focus();
 });
