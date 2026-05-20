@@ -1,4 +1,4 @@
-/* Reset podstawowych stylów i ustawienie box-sizing */
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #f0f4f8; /* Delikatne niebieskawe tło */
+    background-color: #f0f4f8; 
     color: #333;
     display: flex;
     justify-content: center;
@@ -44,7 +44,7 @@ h1 {
     font-size: 1.8rem;
     font-weight: bold;
     color: #34495e;
-    min-height: 40px; /* Zapobiega skakaniu interfejsu */
+    min-height: 40px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,10 +73,9 @@ input[type="text"]:focus {
 #czy {
     font-size: 1.1rem;
     font-weight: 500;
-    min-height: 25px; /* Zapobiega skakaniu interfejsu */
+    min-height: 25px; 
 }
 
-/* Klasy pomocnicze do JS, dodające kolory */
 .correct {
     color: #27ae60;
 }
@@ -105,7 +104,7 @@ button:active {
     transform: scale(0.98);
 }
 
-/* Responsywność dla małych ekranów (telefony) */
+
 @media (max-width: 480px) {
     .container {
         padding: 15px;
