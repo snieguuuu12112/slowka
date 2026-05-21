@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -23,10 +22,33 @@ body {
 
 h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     color: #2c3e50;
     font-size: 2.5rem;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Style dla przełącznika trybów */
+.mode-switch {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    background-color: #bdc3c7;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.mode-btn.active-mode {
+    background-color: #34495e;
 }
 
 .card {
@@ -52,6 +74,7 @@ h1 {
 
 .input-group {
     width: 100%;
+    margin-bottom: 15px;
 }
 
 input[type="text"] {
@@ -76,15 +99,11 @@ input[type="text"]:focus {
     min-height: 25px; 
 }
 
-.correct {
-    color: #27ae60;
-}
+.correct { color: #27ae60; }
+.wrong { color: #e74c3c; }
 
-.wrong {
-    color: #e74c3c;
-}
-
-button {
+/* Uniwersalne style przycisków akcji */
+.primary-btn {
     background-color: #3498db;
     color: white;
     border: none;
@@ -94,36 +113,48 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.1s ease;
     font-weight: bold;
+    width: 100%;
 }
 
-button:hover {
-    background-color: #2980b9;
+.primary-btn:hover { background-color: #2980b9; }
+.primary-btn:active { transform: scale(0.98); }
+
+/* Przyciski w trybie wyboru (Quiz) */
+#options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-button:active {
-    transform: scale(0.98);
+.option-btn {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    border: 2px solid #bdc3c7;
+    padding: 15px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
 }
 
+.option-btn:hover {
+    background-color: #e0e6ed;
+    border-color: #95a5a6;
+}
+
+.option-btn:active { transform: scale(0.98); }
+
+/* Klasa do ukrywania nieużywanych kontenerów */
+.hidden {
+    display: none !important;
+}
 
 @media (max-width: 480px) {
-    .container {
-        padding: 15px;
-    }
-    
-    h1 {
-        font-size: 2rem;
-    }
-
-    .card {
-        padding: 20px;
-    }
-
-    #slowo {
-        font-size: 1.5rem;
-    }
-
-    input[type="text"], button {
-        padding: 12px;
-        font-size: 1rem;
-    }
+    .container { padding: 15px; }
+    h1 { font-size: 2rem; }
+    .card { padding: 20px; }
+    #slowo { font-size: 1.5rem; }
+    input[type="text"], .primary-btn { padding: 12px; font-size: 1rem; }
+    .mode-btn { padding: 8px 15px; font-size: 0.9rem; }
 }
