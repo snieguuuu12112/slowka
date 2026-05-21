@@ -10,13 +10,26 @@
 <body>
     <div class="container">
         <h1>Słówka</h1>
+        
+        <div class="mode-switch">
+            <button id="btn-typing" class="mode-btn active-mode">Wpisywanie</button>
+            <button id="btn-choice" class="mode-btn">Wybieranie</button>
+        </div>
+
         <main class="card">
-            <p id="slowo">Naciśnij przycisk, aby rozpocząć!</p>
-            <div class="input-group">
-                <input type="text" id="odp" placeholder="Wpisz tłumaczenie..." autocomplete="off">
+            <p id="slowo"></p>
+            
+            <div id="typing-container" class="action-container">
+                <div class="input-group">
+                    <input type="text" id="odp" placeholder="Wpisz tłumaczenie..." autocomplete="off">
+                </div>
+                <button id="check" class="primary-btn">Sprawdź</button>
             </div>
+
+            <div id="options-container" class="action-container hidden">
+                </div>
+            
             <p id="czy"></p>
-            <button id="check">Sprawdź</button>
         </main>
     </div>
 </body>
