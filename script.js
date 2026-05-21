@@ -54,59 +54,125 @@ let esp = [
     "cuidado", "el cumpleaños", "el cuñado", "el curso"
 ];
 
-const check = document.getElementById('check');
+// Zmienne DOM
 const slowo = document.getElementById('slowo');
 const czy = document.getElementById('czy');
 const odpInput = document.getElementById('odp');
+const checkBtn = document.getElementById('check');
 
-let lang = 0;
+const btnTyping = document.getElementById('btn-typing');
+const btnChoice = document.getElementById('btn-choice');
+const typingContainer = document.getElementById('typing-container');
+const optionsContainer = document.getElementById('options-container');
+
+// Zmienne stanu gry
+let lang = 0; // 0 = Pytamy po ES, czekamy na PL | 1 = Pytamy po PL, czekamy na ES
 let random = 0;
-let isFirstClick = true; 
+let isChoiceMode = false; // Domyślnie tryb wpisywania
 
-odpInput.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        check.click();
-    }
+// --- ZARZĄDZANIE TRYBAMI ---
+btnTyping.addEventListener('click', () => {
+    isChoiceMode = false;
+    btnTyping.classList.add('active-mode');
+    btnChoice.classList.remove('active-mode');
+    typingContainer.classList.remove('hidden');
+    optionsContainer.classList.add('hidden');
+    czy.innerHTML = "";
+    loadNextWord();
 });
 
-check.addEventListener("click", function(){
-    let odp = odpInput.value.trim();
-    
-    if (!isFirstClick) {
-        if (lang == 1) { 
-            if (odp.toLowerCase() === esp[random].toLowerCase()) {
-                czy.innerHTML = "Dobrze!";
-                czy.className = "correct";
-            } else {
-                czy.innerHTML = "Źle, prawidłowa odpowiedź to: " + esp[random];
-                czy.className = "wrong"; 
-            }
-        } 
-        else if (lang == 0) { 
-            if (odp.toLowerCase() === pl[random].toLowerCase()) {
-                czy.innerHTML = "Dobrze!";
-                czy.className = "correct";
-            } else {
-                czy.innerHTML = "Źle, prawidłowa odpowiedź to: " + pl[random];
-                czy.className = "wrong";
-            }
-        }
-    }
-    
-    isFirstClick = false;
+btnChoice.addEventListener('click', () => {
+    isChoiceMode = true;
+    btnChoice.classList.add('active-mode');
+    btnTyping.classList.remove('active-mode');
+    optionsContainer.classList.remove('hidden');
+    typingContainer.classList.add('hidden');
+    czy.innerHTML = "";
+    loadNextWord();
+});
 
+// --- GENEROWANIE NOWEGO SŁÓWKA ---
+function loadNextWord() {
     random = Math.floor(Math.random() * esp.length);
     let nowyJezyk = Math.floor(Math.random() * 2); 
     
-    if (nowyJezyk == 0) {
+    if (nowyJezyk === 0) {
         slowo.innerHTML = pl[random];
-        lang = 1; 
+        lang = 1; // Wymagamy hiszpańskiego
+        if (isChoiceMode) generateOptions(random, esp);
     } else {
         slowo.innerHTML = esp[random];
-        lang = 0; 
+        lang = 0; // Wymagamy polskiego
+        if (isChoiceMode) generateOptions(random, pl);
     }
 
     odpInput.value = "";
-    odpInput.focus();
+    if (!isChoiceMode) odpInput.focus();
+}
+
+// --- GENEROWANIE 3 PRZYCISKÓW (TRYB WYBORU) ---
+function generateOptions(correctIndex, targetArray) {
+    optionsContainer.innerHTML = ""; // Czyścimy stare przyciski
+    
+    // Zbieramy indeksy (1 poprawny)
+    let indices = [correctIndex];
+    
+    // Dobieramy 2 losowe, unikalne i błędne indeksy
+    while(indices.length < 3) {
+        let rand = Math.floor(Math.random() * targetArray.length);
+        if (!indices.includes(rand)) {
+            indices.push(rand);
+        }
+    }
+    
+    // Algorytm mieszający kolejność elementów (tzw. Fisher-Yates Shuffle)
+    for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    
+    // Tworzenie i dodawanie przycisków HTML
+    indices.forEach(idx => {
+        let btn = document.createElement('button');
+        btn.className = "option-btn";
+        btn.textContent = targetArray[idx];
+        
+        btn.onclick = () => {
+            let correctWord = targetArray[correctIndex];
+            checkAnswer(targetArray[idx], correctWord);
+        };
+        optionsContainer.appendChild(btn);
+    });
+}
+
+// --- LOGIKA SPRAWDZANIA ODPOWIEDZI ---
+function checkAnswer(userAnswer, correctAnswer) {
+    if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+        czy.innerHTML = "Dobrze!";
+        czy.className = "correct";
+    } else {
+        czy.innerHTML = "Źle, prawidłowa odpowiedź to: " + correctAnswer;
+        czy.className = "wrong";
+    }
+    loadNextWord(); // Od razu ładujemy następne po pokazaniu komunikatu
+}
+
+// Obsługa "Entera" w trybie wpisywania
+odpInput.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        checkBtn.click();
+    }
 });
+
+// Obsługa przycisku "Sprawdź" w trybie wpisywania
+checkBtn.addEventListener("click", function(){
+    let odp = odpInput.value.trim();
+    if (odp === "") return; // Ignorujemy puste kliknięcia
+
+    let correctWord = lang === 1 ? esp[random] : pl[random];
+    checkAnswer(odp, correctWord);
+});
+
+// URUCHOMIENIE APLIKACJI (Pierwsze losowanie)
+loadNextWord();
